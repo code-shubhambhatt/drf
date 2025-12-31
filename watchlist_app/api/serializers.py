@@ -2,51 +2,36 @@ from rest_framework import serializers
 # from watchlist_app.models import Movie
 from watchlist_app.models import WatchList , StreamPlatform , Review
 
+from rest_framework import serializers
+from watchlist_app.models import WatchList, StreamPlatform, Review
+
+
 class ReviewSerializer(serializers.ModelSerializer):
+    review_user = serializers.StringRelatedField(read_only=True)
     class Meta:
-        model= Review
-        fields = "__all__"
+        model = Review
+        exclude=('watchlist',)
+        # fields = "__all__"
 
 
-class WatchListSerializer (serializers.ModelSerializer):
-    
-    reviews = ReviewSerializer(many=True , read_only=True)
+class WatchListSerializer(serializers.ModelSerializer):
+    reviews = ReviewSerializer(many=True, read_only=True) 
 
-    class Meta :
+    class Meta:
         model = WatchList
         fields = "__all__"
 
-    def create(self, validated_data) :
-        return WatchList.objects.create(**validated_data)
-    
-    def update(self, instance , validated_data):
-        instance.title = validated_data.get('title',instance.title)
-        instance.about = validated_data.get('storyline',instance.storyline)
-        instance.active = validated_data.get('active',instance.active)
-        instance.save()
-        return instance
-    
 
-class StreamPlatformSerializer (serializers.ModelSerializer):
-    watchlist = WatchListSerializer(many=True, read_only=True)
-    # watchlist = serializers.StringRelatedField(many=True)
-    # watchlist = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
+class StreamPlatformSerializer(serializers.ModelSerializer):
+    watchlist = serializers.PrimaryKeyRelatedField(
+        many=True,
+        read_only=True
+    )
 
-    watchlist = serializers.HyperlinkedRelatedField(many=True , read_only=True , view_name='watch-list-detail')
-
-    class Meta :
+    class Meta:
         model = StreamPlatform
         fields = "__all__"
 
-    def create(self, validated_data) :
-        return StreamPlatform.objects.create(**validated_data)
-    
-    def update(self, instance , validated_data):
-        instance.name = validated_data.get('name',instance.name)
-        instance.about = validated_data.get('about',instance.about)
-        instance.website = validated_data.get('website',instance.website)
-        instance.save()
-        return instance
 
 
         
