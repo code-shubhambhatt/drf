@@ -141,7 +141,7 @@ Represents a user-submitted review.
 
 ### Clone the repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/code-shubhambhatt/drf
 cd watchmate
 ````
 
@@ -211,8 +211,6 @@ http://127.0.0.1:8000/watch/
 
 Shubham Bhatt
 Software Engineer – Backend (Python, Django)
-
-```
 
 
 
